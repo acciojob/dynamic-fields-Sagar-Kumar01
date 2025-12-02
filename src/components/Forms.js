@@ -6,26 +6,50 @@ function Forms() {
   function handelClick() {
     setCount([...count, count.length + 1]);
   }
-  function deleting(id) {
+
+  function deleting(id, e) {
+    e.preventDefault();
     setCount(count.filter((val) => val !== id));
   }
-  function submitting(e){
+
+  function submitting(e) {
     e.preventDefault();
-    console.dir(e.target)
+
+    const formData = new FormData(e.target);
+    let final = [];
+
+    for (let val of count) {
+      let name = formData.get(`name-${val}`);
+      let age = formData.get(`age-${val}`);
+
+      if (name && age) {
+        final.push({ name, age: Number(age) });
+      }
+    }
+
+    console.log(final); 
   }
 
   return (
     <div>
       <form onSubmit={submitting}>
-        {count.map((val)=>(
-        <div key={val}>
-           <input placeholder="Name" name="name" />
-           <input placeholder="Age" name="age" />
-          <button onClick={()=>deleting(val)}>Remove</button>
-        </div>
-      ))}
-      <button>Submit</button>
+        {count.map((val) => (
+          <div key={val}>
+            <input
+              placeholder="Name"
+              name={`name-${val}`}
+            />
+            <input
+              placeholder="Age"
+              name={`age-${val}`}
+            />
+            <button onClick={(e) => deleting(val, e)}>Remove</button>
+          </div>
+        ))}
+
+        <button type="submit">Submit</button>
       </form>
+
       <button onClick={handelClick}>Add More...</button>
     </div>
   );
