@@ -1,56 +1,67 @@
 import React, { useState } from "react";
 
 function Forms() {
-  let [count, setCount] = useState([1]);
+  const [fields, setFields] = useState([{ id: 1, name: "", age: "" }]);
 
-  function handelClick() {
-    setCount([...count, count.length + 1]);
+  function addField() {
+    setFields([...fields, { id: fields.length + 1, name: "", age: "" }]);
   }
 
-  function deleting(id, e) {
+  function deleteField(id, e) {
     e.preventDefault();
-    setCount(count.filter((val) => val !== id));
+    setFields(fields.filter((f) => f.id !== id));
+  }
+
+  function handleChange(id, key, value) {
+    setFields(
+      fields.map((f) =>
+        f.id === id ? { ...f, [key]: value } : f
+      )
+    );
   }
 
   function submitting(e) {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
-    let final = [];
+    const formatted = fields.map((f) => ({
+      name: f.name,
+      age: Number(f.age), // FIX: convert to Number
+    }));
 
-    for (let val of count) {
-      let name = formData.get(`name`);
-      let age = formData.get(`age`);
-
-      if (name && age) {
-        final.push({ name, age: Number(age) });
-      }
-    }
-
-    console.log(final); 
+    console.log(formatted);
   }
 
   return (
     <div>
       <form onSubmit={submitting}>
-        {count.map((val) => (
-          <div key={val}>
+        {fields.map((f) => (
+          <div key={f.id}>
             <input
               placeholder="Name"
-              name={`name`}
+              value={f.name}
+              onChange={(e) =>
+                handleChange(f.id, "name", e.target.value)
+              } name="name"
             />
+
             <input
               placeholder="Age"
-              name={`age`}
+              value={f.age}
+              onChange={(e) =>
+                handleChange(f.id, "age", e.target.value)
+              } name="age"
             />
-            <button onClick={(e) => deleting(val, e)}>Remove</button>
+
+            <button onClick={(e) => deleteField(f.id, e)}>
+              Remove
+            </button>
           </div>
         ))}
 
         <button type="submit">Submit</button>
       </form>
 
-      <button onClick={handelClick}>Add More...</button>
+      <button onClick={addField}>Add More...</button>
     </div>
   );
 }
