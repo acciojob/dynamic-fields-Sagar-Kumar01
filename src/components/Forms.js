@@ -19,8 +19,8 @@ function Forms() {
     let final = [];
 
     for (let val of count) {
-      let name = formData.get(`name-${val}`);
-      let age = formData.get(`age-${val}`);
+      let name = formData.get(`name`);
+      let age = formData.get(`age`);
 
       if (name && age) {
         final.push({ name, age: Number(age) });
@@ -37,11 +37,11 @@ function Forms() {
           <div key={val}>
             <input
               placeholder="Name"
-              name={`name-${val}`}
+              name={`name`}
             />
             <input
               placeholder="Age"
-              name={`age-${val}`}
+              name={`age`}
             />
             <button onClick={(e) => deleting(val, e)}>Remove</button>
           </div>
