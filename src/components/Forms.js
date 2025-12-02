@@ -25,7 +25,7 @@ function Forms() {
 
     const formatted = fields.map((f) => ({
       name: f.name,
-      age: Number(f.age), // FIX: convert to Number
+      age: f.age,
     }));
 
     console.log(formatted);
